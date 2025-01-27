@@ -1,13 +1,33 @@
 import { useState } from "react";
-import { Text, View, Button, TextInput } from "react-native";
+import {
+  Text,
+  View,
+  Button,
+  TextInput,
+  FlatList,
+  StyleSheet,
+} from "react-native";
 
 export default function Index() {
   const [inputValue, setInputValue] = useState("");
   const [displayText, setDisplayText] = useState("");
+  const [toDoList, setToDoList] = useState<{ id: string; title: string }[]>([]);
 
   const handleButtonPress = () => {
     setDisplayText(inputValue);
+    setToDoList([
+      ...toDoList,
+      { id: Date.now().toString(), title: inputValue },
+    ]);
+    setInputValue("");
   };
+
+  type ItemProps = { title: string };
+
+  const Item = ({ title }: ItemProps) => {
+    return <Text>{title}</Text>;
+  };
+
   return (
     <View
       style={{
@@ -31,8 +51,12 @@ export default function Index() {
         }}
       />
       <Button title="add" onPress={handleButtonPress} color="#f194ff" />
-      <Text>asldkfjasdl</Text>
-      <Text>You entered: {displayText}</Text>
+      <Text>TESTING</Text>
+      <FlatList
+        data={toDoList}
+        renderItem={({ item }) => <Item title={item.title} />}
+        keyExtractor={(item) => item.id}
+      />
     </View>
   );
 }
